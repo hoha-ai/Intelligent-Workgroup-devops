@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-xboom-cryption
+  namespace: deeptalk
+spec:
+  ports:
+    - port: 18125
+      name: "xboom-cryption-port-18125"
+      protocol: TCP
+      targetPort: 8000
+      nodePort: 18125
+  selector:
+    app: deeptalk-xboom-cryption
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-xboom-cryption
+  namespace: deeptalk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-xboom-cryption
+  template:
+    metadata:
+      labels:
+        app: deeptalk-xboom-cryption
+    spec:
+      containers:
+        - name: deeptalk-xboom-cryption
+          image: registry.jxit.net.cn:5000/deeptalk/xboom:git-1455
+          command: ["sleep", "8888888888888"]
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: xboom-cryption-src
+              mountPath: /app
+      volumes:
+        - name: xboom-cryption-src
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-cryption-src
+

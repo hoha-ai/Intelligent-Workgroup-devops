@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deeptalk-ssh-pub
+  namespace: deeptalk
+data:
+  id_rsa.pub: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQZMpfgsl2TK1tJPfNECbmNvqQz2Zs/giqpPK1sgE+5d2d/kpPli3o7rxdmUpCt388KnEITAOvOzathU+g6TaEjGBBUXjP6CwIPSbA4+4SnnTPD/0l3xmEBeRm1Ozq+oiMZli7ImnCnXeyJ5XyMZzItUhQlTFTIqYJr5nJqbcma41MMCxf3EuGyLBZM/TC8rW8p0ZwYHdSQFZHDQ2AqZxHUJlB/0ySaINSYNRoLGqIxAPjB95KZMbBFLPuijdITwfHKoTxPiTMQEjoKwY2jVZWCp41PHIXqGI61bHeU+meVCfbKz2OLVJyFXMLeqzB4dYFIDQ/jCjs9sAo9YrF6PW5449cPg+4vMUumtKJLkTFdq5oK7npyQvvbdOfLU4OcI+IldQwFPOOwzgx7S6oug9m5UlP535Y21vgwSqbE94cZezrZLfTlgJqYkdqZyRcm4RZ8BUzHFnzvunY5JPbCHqloX6fOBtBBJjYNUHBuz9eyF9+RH/TZSjWc4S9Pv1Wsks= root@deeptalk-xboom-f59486ccc-fzd8v

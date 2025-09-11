@@ -1,0 +1,51 @@
+    3  apt install selinux-utils
+    7  apt install vim
+  141  dpkg -l | grep nvidia
+  143  curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg   && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list |     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' |     sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+  158  curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg   && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list |     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' |     sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+  159  sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
+  160  vim /etc/apt/sources.list.d/nvidia-container-toolkit.list 
+  161  apt-get -y install nvidia-container-toolkit nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server nvidia-utils-535-server
+  162  apt -y update
+  163  apt -y install nvidia-container-toolkit nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server nvidia-utils-535-server
+  165  apt -y install nvidia-container-toolkit nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server nvidia-utils-535-server
+  166  dpkg -l | grep nvidia-headless
+  167  apt -y install nvidia-container-toolkit nvidia-container-runtime 
+  168  apt -y install cuda-drivers-fabricmanager-535 nvidia-headless-535-server nvidia-utils-535-server
+  169  apt -y install cuda-drivers-fabricmanager-535
+  170  apt -y install nvidia-headless-535-server
+  171  apt-get -y install nvidia-headless-535-server nvidia-utils-535-server
+  172  apt-get -y install nvidia-dkms-535-server
+  174  apt-get -y install nvidia-dkms-535-server
+  175  dpkg -l | grep nvidia-kernel
+  176  apt-get -y install nvidia-headless-535-server nvidia-utils-535-server 
+  177  apt -y install nvidia-headless-no-dkms-535-server
+  178  apt -y install nvidia-kernel-source-535-server
+  179  sudo apt-get install -f
+  180  apt -y install nvidia-kernel-source-535-server
+  182  sudo apt-get install -f
+  183  sudo apt autoremove
+  184  apt-get -y install nvidia-headless-535-server nvidia-utils-535-server 
+  185  history | grep apt
+  186  apt -y install nvidia-container-toolkit nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server nvidia-utils-535-server
+  188  dpkg -l | grep nvidia
+  202  dpkg -l | grep nvidia
+  203  dpkg -l | grep nvidia | grep 183
+  204  apt -y remove libnvidia-compute-535 nvidia-compute-utils-535 nvidia-dkms-535
+  205  apt-get autoremove 
+  206  apt -y remove libnvidia-compute-535 nvidia-compute-utils-535 nvidia-dkms-535
+  207  dpkg -l | grep nvidia | grep 183
+  208  dpkg -P nvidia-dkms-535
+  209  dpkg -l | grep nvidia | grep 183
+  210  dpkg -P nvidia-compute-utils-535
+  211  dpkg -P libnvidia-compute-535
+  212  cd /etc/apt/
+  224  dpkg -l | grep nvidia | grep 183
+  225  dpkg -l | grep nvidia 
+  226  apt -y install nvidia-container-toolkit nvidia-container-runtime cuda-drivers-fabricmanager-535 nvidia-headless-535-server nvidia-utils-535-server
+  228  apt -y install nvidia-dkms-535
+  229  apt -y install nvidia-kernel-source-535
+  265  dpkg -l | grep nvidia
+  281  history | grep "apt\|dpkg" > cmd.txt
+
+/home/zdzn/anaconda3/envs/DeepSeekR1/bin/python /home/zdzn/anaconda3/envs/DeepSeekR1/bin/vllm serve /home/zdzn/Qwen2.5-32B-Instruct-GPTQ-Int4/ --served-model-name qwen-2.5 --tensor-parallel-size 2 --max-model-len 10000 --enforce-eager --gpu_memory_utilization=0.8 --enable-chunked-prefill=False --host 0.0.0.0 --port 9088

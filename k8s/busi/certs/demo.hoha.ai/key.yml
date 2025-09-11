@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-selfsigned-key
+  namespace: deeptalk
+data:
+  nginx-selfsigned.key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEowIBAAKCAQEAkobt3HIfo9Ik2tyRBmci7eDr+IBavucmi8zKbDhqWL3PmRKB
+    D9ElK7/F348zX4P4qGvymXcGYZqy/IhGVehTNN1nQG2JMqFxn5aHTWrx/YWq5utO
+    TOnEqA50Pn/DxO+SKS64lnLqmcgcHV1nBS644XVzgIDzDROtJORbnppkbQlmZBUU
+    89aBSGs3DcOqO1ShNIhpFJgzBYKbVMMo5p2KqaGMmzUncGiHIz+PsAhfy0F+2oOy
+    6bCEFOn+EXfQR+tIYFl3p+4CJIarOBe3Ii33R0t/kPkJEL8agbMp9Bl+JvXgPL4M
+    zzzzsh0LSgmH59NaCu6um+LdkYZG8ENcuuTfgwIDAQABAoIBAEguuiy398g/NLKw
+    p6zsz/M5s2VW7d1Ph9ikyS9o11LiJsu0punA0TvtHDBWnis2mx91FiztyrH4gKYR
+    B/04Fw1a6It/qm/Lwmqov/yua4nF+HwLfSY8nwlfHXrQfAOfNXSeNIbBE7swLlF0
+    +tQ9wQwoTP8IBzPw9oHPESdfzYs8rUPSXH/lIUZ2a2IN6pUnYNNYSazuGS72F0kv
+    MTMBuGJBfFxxGsudiAPHWk4lnA4kZmf5qmChjSZDabonOQTC2QC4XrPeWZ8mPkXS
+    IQ8GOHCHreSWE1pAy7+nQflvej89ooe/kUabAdQLn3a9vbXlgDjoNXA7rqgji/OQ
+    yG4Wq/kCgYEA6B3BDVL319NiW3s4IGQuVVWCyFqgyy9uq3NtyqGpPJ81CIt6Jqlt
+    oNJk8KevwlDhKhFybCG7GaOYiGz2uZHcKp5DV+Sl/PNHKtIX/eb95fbss+JBaI78
+    aminAgL73pluaMdllWFP2EiEkYDcvLcvpWSuaROoVRuBEvQb7llBtuUCgYEAoZqk
+    8EpKtNC1ZO/vVynILsfNyfs0BlobmEg8tndcrRkqZ1uQON81rNdbbOYr1BLi6Glg
+    C0zrRp6C3hmIy3IU3/XCXNlPCK1mP8P7j8RrWA/VBvntfeJ1Rfmz3YbuCJyGSXcG
+    nIF8WQ4YTRvcZOdk5WdoRchKBR7Fka+AuVS2LkcCgYEA43AEMeISJ9Bgl/Ls1BBV
+    thfLxjXHSFB5yFWaRuqQwW3esTi5wBhT6zk83vHwLh7CAk6GJ54FjuHWHBdoyfw6
+    FyhsJDtOycQ2/6ZNC+TC9Ao3dStFnAY/HqTcwAPceAkvPkvjJbPsYKjt/QSfRerZ
+    LN6yZxNz5bDFkKTQmYOr+GECgYBw+aOFOOqxLZciUXqI/PStf5EmOy9LoYLZGucW
+    yKtJd+ZlC2Xv3Fux0XxgzSimwe1PfRtfyw5P+FCU5FT1pXNifnS6ZFEUR+TLfz9G
+    apKApdDPZ7nX35EMslxD6ihObN6UTVmZ4AwGVgw3G9sfz4SBu6Dx5+uXWMPV7VOY
+    PNh/0QKBgF8IXBfPN86yDf1GI0LJkfFrSogb7kminNIn58cnzkDB2X01br8UdFRw
+    g9C/k2pxlmbhrD02yfNPqsVnWZ2iL3NDegNejC6zEb+1uv+bXWQ4E/m2KrBWlDgf
+    FMMP6up+j3hboA+Glpf8OeSHWY0qXIlIGdsgQURbp+VYO8lpVkwI
+    -----END RSA PRIVATE KEY-----

@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-neo4j
+  namespace: deeptalk
+  labels:
+    app: deeptalk-neo4j
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-neo4j
+  template:
+    metadata:
+      labels:
+        app: deeptalk-neo4j
+    spec:
+      containers:
+      - name: neo4j
+        image: registry.jxit.net.cn:5000/deeptalk/dozerdb:5.26.3.0
+        ports:
+        - containerPort: 7474
+          name: http
+        - containerPort: 7687
+          name: bolt
+        env:
+        - name: TZ
+          value: Asia/Shanghai
+        - name: NEO4J_AUTH
+          value: "neo4j/neo4j@openspg"
+        - name: NEO4J_PLUGINS
+          value: '["apoc"]'
+        - name: NEO4J_server_memory_heap_initial__size
+          value: "1G"
+        - name: NEO4J_server_memory_heap_max__size
+          value: "4G"
+        - name: NEO4J_server_memory_pagecache_size
+          value: "1G"
+        - name: NEO4J_apoc_export_file_enabled
+          value: "true"
+        - name: NEO4J_apoc_import_file_enabled
+          value: "true"
+        - name: NEO4J_dbms_security_procedures_unrestricted
+          value: "*"
+        - name: NEO4J_dbms_security_procedures_allowlist
+          value: "*"
+        - name: NEO4J_dbms_max__databases
+          value: "2000"
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: deeptalk-neo4j-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-neo4j
+  namespace: deeptalk
+spec:
+  selector:
+    app: deeptalk-neo4j
+  ports:
+    - name: http
+      port: 7474
+      targetPort: 7474
+      nodePort: 7474  # HTTP端口的外部访问端口
+    - name: bolt
+      port: 7687
+      targetPort: 7687
+      nodePort: 7687  # Bolt协议的外部访问端口
+  type: NodePort 

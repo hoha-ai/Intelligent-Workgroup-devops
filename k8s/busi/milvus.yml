@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-milvus
+  namespace: deeptalk
+spec:
+  ports:
+    - port: 19530
+      name: "milvus-port-19530"
+      protocol: TCP
+      nodePort: 19530
+    - port: 9091
+      name: "milvus-port-9091"
+      protocol: TCP
+  selector:
+    app: deeptalk-milvus
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-milvus
+  namespace: deeptalk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-milvus
+  template:
+    metadata:
+      labels:
+        app: deeptalk-milvus
+    spec:
+      containers:
+        - name: deeptalk-milvus
+          image: registry.jxit.net.cn:5000/deeptalk/milvus:v2.5.5
+          command: ["milvus", "run", "standalone"]
+          securityContext:
+            seccompProfile:
+              type: Unconfined
+          env:
+            - name: ETCD_ENDPOINTS
+              value: "deeptalk-etcd:2379"
+            - name: MINIO_ADDRESS
+              value: "deeptalk-minio:9000"
+          volumeMounts:
+            - name: milvus-storage
+              mountPath: /var/lib/milvus
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9091
+            initialDelaySeconds: 90
+            periodSeconds: 30
+            timeoutSeconds: 20
+            failureThreshold: 3
+          ports:
+            - containerPort: 19530
+            - containerPort: 9091
+      volumes:
+        - name: milvus-storage
+          persistentVolumeClaim:
+            claimName: deeptalk-milvus-pvc

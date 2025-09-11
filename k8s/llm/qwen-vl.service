@@ -1,0 +1,13 @@
+[Unit]
+Description=Qwen-2.5-vl Backend Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/home/root123/anaconda3/envs/reranker/bin/python /home/root123/anaconda3/envs/reranker/bin/vllm serve /home/root123/Qwen2.5-VL-7B-Instruct-GPTQ-Int4/ --served-model-name qwen-2.5-vl --tensor-parallel-size 2 --max-model-len 20000 --gpu_memory_utilization=0.75 --host 0.0.0.0 --port 8088 --dtype=half --max-num-seqs 1
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

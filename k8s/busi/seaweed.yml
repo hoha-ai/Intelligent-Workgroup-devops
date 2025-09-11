@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seaweed-s3-config
+  namespace: deeptalk
+data:
+  s3.conf: |
+    {
+      "identities": [
+        {
+          "name": "adminuser",
+          "credentials": [
+            {
+              "accessKey": "minioadmin",
+              "secretKey": "minioadmin"
+            },
+            {
+              "accessKey": "testaccesskey",
+              "secretKey": "testsecretkey"
+            }
+          ],
+          "actions": [
+            "Admin",
+            "Read",
+            "List",
+            "Tagging",
+            "Write"
+          ]
+        }
+      ]
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: deeptalk
+  name: deeptalk-seaweed
+spec:
+  selector:
+    app: deeptalk-seaweed
+  ports:
+  - port: 8333
+    targetPort: 8333
+    name: port-8333
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: deeptalk
+  name: deeptalk-seaweed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-seaweed
+  template:
+    metadata:
+      labels:
+        app: deeptalk-seaweed
+    spec:
+      containers:
+      - name: deeptalk-seaweed
+        image: registry.jxit.net.cn:5000/deeptalk/seaweedfs:3.92
+        command:
+          - sh
+          - -c
+          - |
+            mkdir -p /data/master
+            mkdir -p /data/volume
+
+            /usr/bin/weed -logtostderr=true master -mdir=/data/master  -port=9333 > /dev/null 2>&1 &
+            /usr/bin/weed -logtostderr=true volume -dir=/data/volume -max=300 -mserver=localhost:9333 -port=8081 > /dev/null 2>&1 &
+            /usr/bin/weed -logtostderr=true filer -s3 -s3.config /etc/seaweed/s3.conf -port=8888 -master=localhost:9333
+        ports:
+          - containerPort: 8333
+        volumeMounts:
+        - name: volume-data
+          mountPath: /data
+        - name: seaweed-s3-config
+          mountPath: /etc/seaweed/s3.conf
+          subPath: s3.conf
+      volumes:
+        - name: volume-data
+          persistentVolumeClaim:
+            claimName: deeptalk-seaweed-pvc
+        - name: seaweed-s3-config
+          configMap:
+            name: seaweed-s3-config
+            items:
+            - key: s3.conf
+              path: s3.conf

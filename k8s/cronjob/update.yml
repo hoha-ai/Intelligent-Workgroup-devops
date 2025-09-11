@@ -1,0 +1,106 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: update-cronjob
+  namespace: deeptalk
+spec:
+  schedule: "*/10 * * * *"   # 每10分钟执行一次
+  concurrencyPolicy: Forbid  # 禁止并发执行
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 700
+      template:
+        spec:
+          restartPolicy: "Never"
+          containers:
+          - name: update
+            image: registry.jxit.net.cn:5000/alpine/git:2.49.1
+            command: ["/bin/sh", "-xc"]
+            args:
+            - |
+              echo "Checking for latest xboom version..."
+              if [ -d "/deeptalk-xboom-src/.git" ]; then
+                echo "Pulling deeptalk-xboom-src..."
+                cd /deeptalk-xboom-src
+                git remote set-url origin git@codeup.aliyun.com:67ea58b9132e20831f1d4c8f/GZZDAi/deeptalkbackend.git
+                GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git pull origin master
+                git remote set-url origin https://codeup.aliyun.com/67ea58b9132e20831f1d4c8f/GZZDAi/deeptalkbackend.git
+                echo "deeptalk-xboom-src pull completed with exit code $?"
+              else
+                echo "deeptalk-xboom-src is not a git repository"
+                exit 1
+              fi
+
+              echo "Checking for latest web version..."
+              WEB_URL="http://dt.aidynamic.com:18123/install/web/"
+              
+              LATEST_FILE=$(wget -q -O- "$WEB_URL" | grep -Eo 'Deeptalk-web-[^<]*\.tar\.gz' | sort -r | head -n 1 | awk -F ">" '{print $2}')
+              
+              if [ -z "$LATEST_FILE" ]; then
+                echo "ERROR: Could not find any web package files"
+                exit 1
+              fi
+              
+              echo "Latest web package: $LATEST_FILE"
+              
+              # 检查当前目录是否已存在最新版本
+              if [ -f "/deeptalk-web-src/$LATEST_FILE" ]; then
+                echo "Latest version $LATEST_FILE already exists, skipping download"
+              else
+                echo "Downloading new version: $LATEST_FILE"
+                
+                cd /deeptalk-web-src && rm -rf * && rm -rf .vite
+                
+                timeout 60 wget -q "$WEB_URL$LATEST_FILE"
+                
+                if [ $? -eq 0 ] && [ -f "$LATEST_FILE" ]; then
+                  echo "Download successful, extracting files..."
+                  
+                  tar -xzf $LATEST_FILE
+                  mv $(echo $LATEST_FILE | sed 's/.tar.gz//g')/* .
+                  mv $(echo $LATEST_FILE | sed 's/.tar.gz//g')/.vite .
+                  
+                  echo "Extraction completed successfully"
+                else
+                  rm -rf $LATEST_FILE
+                  echo "ERROR: Download failed or file not found"
+                  exit 1
+                fi
+              fi
+              
+              echo "Update process completed at $(date)"
+            volumeMounts:
+            - name: deeptalk-xboom-src
+              mountPath: /deeptalk-xboom-src
+            - name: deeptalk-web-src
+              mountPath: /deeptalk-web-src
+            - name: deeptalk-ssh-key
+              mountPath: /root/.ssh/id_rsa
+              subPath: id_rsa
+            - name: deeptalk-ssh-pub
+              mountPath: /root/.ssh/id_rsa.pub
+              subPath: id_rsa.pub
+          volumes:
+          - name: deeptalk-xboom-src
+            persistentVolumeClaim:
+              claimName: deeptalk-xboom-src
+          - name: deeptalk-web-src
+            persistentVolumeClaim:
+              claimName: deeptalk-web-src
+          - name: deeptalk-ssh-key
+            configMap:
+              name: deeptalk-ssh-key
+              items:
+                - key: id_rsa
+                  path: id_rsa
+                  mode: 0400
+          - name: deeptalk-ssh-pub
+            configMap:
+              name: deeptalk-ssh-pub
+              items:
+                - key: id_rsa.pub
+                  path: id_rsa.pub

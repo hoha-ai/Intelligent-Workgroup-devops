@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-xboom-dev
+  namespace: deeptalk
+spec:
+  ports:
+    - port: 18129
+      name: "xboom-dev-port-18129"
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    app: deeptalk-xboom-dev
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-xboom-dev
+  namespace: deeptalk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-xboom-dev
+  template:
+    metadata:
+      labels:
+        app: deeptalk-xboom-dev
+    spec:
+      containers:
+        - name: deeptalk-xboom-dev
+          image: registry.jxit.net.cn:5000/deeptalk/xboom:git-1642
+          command: ["sleep", "88888888888888"]
+          # command: ["python3", "run.py", "--host", "0.0.0.0", "--port", "8000", "--reload", "False", "--workers", "1"]
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: xboom-dev-src
+              mountPath: /app
+            - name: xboom-data
+              mountPath: /data
+      volumes:
+        - name: xboom-dev-src
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-dev-src
+        - name: xboom-data
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-data

@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deeptalk-xboom-conf
+  namespace: deeptalk
+data:
+  xboom.conf: |
+    DATABASE_URL=mongodb://deeptalk-mongo:27017
+    SECRET_KEY=your-secret-key-here
+    MAIL_USERNAME=aiservice@aidynamic.com
+    MAIL_PASSWORD=aiDynamic2025
+    MAIL_FROM=aiservice@aidynamic.com
+    MAIL_PORT=465
+    MAIL_SERVER=smtp.qiye.aliyun.com
+    MILVUS_HOST = deeptalk-milvus
+    MILVUS_PORT = 19530
+    OSS_endpoint=https://oss-cn-shenzhen.aliyuncs.com
+    OSS_key=LTAI5tSfPDtqMpEEu2PrkNy8
+    OSS_secret=6s9Ctywb5QmAyi7W93nZrrLILXOCKL
+    OSS_bucket_name=ai-agent
+    DEEPSEEK_KEY=sk-fItvpjz8nP4U5WEU24Wf92cTfKIH1TR6h7j4nhvRe6UOZCws
+    DEEPSEEK_URL=http://10.42.0.1:8088/v1
+    DEEPSEEK_MODEL_NAME=qwen-2.5
+    LOCAL_MODEL_URL=http://10.42.0.1:8088/v1
+    LOCAL_MODEL_NAME=qwen-2.5
+    EMBEDDING_URL=http://10.42.0.1:9088/v1
+    EMBEDDING_MODEL_NAME=bce-embedding-base_v1
+    HWC_ID=adminaccesskey
+    HWC_KEY=adminsecretkey
+    HWC_BUCKET_ENDPOINT=deeptalk-minio:9000
+    HWC_BUCKET_NAME=deeptalk
+    HWC_LLM_ENDPOINT=https://infer-modelarts-cn-southwest-2.myhuaweicloud.com/v1/infers/f354eacc-a2c5-43b4-a785-e5aadca988b3/v1
+    HWC_LLM_API_KEY=qvZtTKo1XXHb5QWQip9KZOF_7OTZ6GDwBRQf0PVBDM8mQjp-4YtO7UOGaFwnBqXjiSPBhN2BkLyzX5K632uk6Q
+    BILIBILI_SESSDATA=1
+    BILIBILI_BILI_JCT=2
+    BILIBILI_BUVID3=3
+    ALITONGYI_SK=sk-d6c117118f964eb49f7e268684d051f5
+    ALITONGYI_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+    MODEL_root_dir=/
+    DOCUMENT_SAVE_PATH=/data
+    ZHIPU_SK=4
+    HUNYUAN_SK=4
+    QIANFAN_AK=5
+    QIANFAN_SK=5
+    MAX_FILE_SIZE=10485760
+    ALLOWED_EXTENSIONS=[".txt", ".pdf", ".doc", ".docx", ".xlsx", ".pptx", ".md",".png", ".jpg", ".jpeg",".wav",".mp3"]
+    TEST_TOKEN=1
+    HEAD_COMPRESS_RATIO=0.5
+    TIKA_SERVER=http://deeptalk-tika:9998
+    DEFAULT_GROUP_ASSISTANT_NAME=DeepTalk
+    DEFAULT_GROUP_NAME=我与AI
+    WAKE_WORD=1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-xboom
+  namespace: deeptalk
+spec:
+  ports:
+    - port: 18123
+      name: "xboom-port-18123"
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    app: deeptalk-xboom
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-xboom
+  namespace: deeptalk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-xboom
+  template:
+    metadata:
+      labels:
+        app: deeptalk-xboom
+    spec:
+      containers:
+        - name: deeptalk-xboom
+          image: registry.jxit.net.cn:5000/deeptalk/xboom:git-1794
+          command: ["sleep", "888888888888888"]
+          # command: ["python3", "run.py", "--host", "0.0.0.0", "--port", "8000", "--reload", "False", "--workers", "1"]
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: xboom-src
+              mountPath: /app
+            - name: xboom-conf
+              mountPath: /etc/xboom
+            - name: xboom-data
+              mountPath: /data
+            - name: deeptalk-ssh-key
+              mountPath: /root/.ssh/id_rsa
+              subPath: id_rsa
+            - name: deeptalk-ssh-pub
+              mountPath: /root/.ssh/id_rsa.pub
+              subPath: id_rsa.pub
+      volumes:
+        - name: xboom-src
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-src
+        - name: xboom-data
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-data
+        - name: xboom-conf
+          configMap:
+            name: deeptalk-xboom-conf
+        - name: deeptalk-ssh-key
+          configMap:
+            name: deeptalk-ssh-key
+            items:
+              - key: id_rsa
+                path: id_rsa
+                mode: 0400
+        - name: deeptalk-ssh-pub
+          configMap:
+            name: deeptalk-ssh-pub
+            items:
+              - key: id_rsa.pub
+                path: id_rsa.pub

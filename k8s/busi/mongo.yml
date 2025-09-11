@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deeptalk-mongo-backup-script
+  namespace: deeptalk
+data:
+  backup.sh: |
+    #!/bin/bash
+    set -e
+    BACKUP_DIR="/backup"
+    TIMESTAMP=$(date +%F_%H-%M-%S)
+    TMP_DIR="${BACKUP_DIR}/dump_${TIMESTAMP}"
+    TAR_FILE="${BACKUP_DIR}/mongodb_backup_${TIMESTAMP}.tar.gz"
+
+    mkdir -p "$TMP_DIR"
+
+    mongodump --host 127.0.0.1 --port 27017 --out "$TMP_DIR"
+
+    tar -zcvf "$TAR_FILE" -C "$TMP_DIR" .
+
+    rm -rf "$TMP_DIR"
+
+    echo "[$(date)] Backup completed: $TAR_FILE"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-mongo
+  namespace: deeptalk
+  labels:
+    app: deeptalk-mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-mongo
+  template:
+    metadata:
+      labels:
+        app: deeptalk-mongo
+    spec:
+      containers:
+      - name: deeptalk-mongo
+        image: registry.jxit.net.cn:5000/uniserver/mongodb:4.2
+        resources:
+          requests:
+            memory: "500Mi"
+          limits:
+            memory: "1Gi"
+        ports:
+        - containerPort: 27017
+          name: tcp
+          protocol: TCP
+        volumeMounts:
+        - name: mongo-data
+          mountPath: /data/db
+      - name: deeptalk-mongo-backup
+        image: registry.jxit.net.cn:5000/uniserver/mongodb:4.2
+        command:
+        - "sh"
+        - "-xc"
+        - |
+          while true; do
+            now=$(date +%H:%M)
+            if [ "$now" = "02:00" ]; then
+              /scripts/backup.sh
+              sleep 86400
+            fi
+            sleep 60
+          done
+        volumeMounts:
+        - name: mongo-data
+          mountPath: /data/db
+        - name: mongo-backup-script
+          mountPath: /scripts
+        - name: mongo-backup
+          mountPath: /backup
+      volumes:
+      - name: mongo-data
+        persistentVolumeClaim:
+          claimName: deeptalk-mongo-pvc
+      - name: mongo-backup-script
+        configMap:
+          name: deeptalk-mongo-backup-script
+          defaultMode: 0755
+      - name: mongo-backup
+        persistentVolumeClaim:
+          claimName: deeptalk-mongo-backup-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-mongo
+  namespace: deeptalk
+  labels:
+    app: deeptalk-mongo
+spec:
+  type: ClusterIP
+  selector:
+    app: deeptalk-mongo
+  ports:
+  - name: db
+    port: 27017
+    protocol: TCP

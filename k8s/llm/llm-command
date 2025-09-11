@@ -1,0 +1,5 @@
+nohup /home/root123/anaconda3/envs/DeepSeekR1/bin/python /home/root123/anaconda3/envs/DeepSeekR1/bin/vllm serve /home/root123/bge-reranker-v2-m3/ --served-model-name bge-reranker-v2-m3 --tensor-parallel-size 2 --enforce-eager --gpu_memory_utilization=0.1 --enable-chunked-prefill=False --host 0.0.0.0 --port 9089 &
+
+nohup /home/root123/anaconda3/envs/DeepSeekR1/bin/python /home/root123/anaconda3/envs/DeepSeekR1/bin/vllm serve /home/root123/Qwen2.5-32B-Instruct-GPTQ-Int4/ --served-model-name qwen-2.5 --tensor-parallel-size 2 --max-model-len 8000 --enforce-eager --gpu_memory_utilization=0.75 --enable-chunked-prefill=False --host 0.0.0.0 --port 8088 &
+
+nohup /home/root123/anaconda3/envs/DeepSeekR1/bin/python /home/root123/anaconda3/envs/DeepSeekR1/bin/vllm serve /home/root123/bce-embedding-base_v1/ --served-model-name bce-embedding-base_v1 --tensor-parallel-size 2 --enforce-eager --gpu_memory_utilization=0.1 --enable-chunked-prefill=False --host 0.0.0.0 --port 9088 &

@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deeptalk
+  namespace: deeptalk
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: deeptalk-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "pods/exec"]
+  verbs: ["get", "list", "watch", "create"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: deeptalk-binding
+subjects:
+- kind: ServiceAccount
+  name: deeptalk
+  namespace: deeptalk
+roleRef:
+  kind: ClusterRole
+  name: deeptalk-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-jenkins
+  namespace: deeptalk
+spec:
+  ports:
+    - port: 18120
+      name: "jenkins-port-18120"
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 18120
+  selector:
+    app: deeptalk-jenkins
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-jenkins
+  namespace: deeptalk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-jenkins
+  template:
+    metadata:
+      labels:
+        app: deeptalk-jenkins
+    spec:
+      serviceAccountName: deeptalk
+      containers:
+        - name: deeptalk-jenkins
+          image: registry.jxit.net.cn:5000/deeptalk/deeptalk-deeptalkfrontend-build:20250422
+          command: ["java", "-jar", "/opt/jenkins-2.492.3.war"]
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JENKINS_HOME
+              value: /var/lib/jenkins
+            - name: JAVA_HOME
+              value: /usr
+            - name: ANDROID_HOME
+              value: /opt/android-sdk/
+            - name: PATH
+              value: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/node-v20.13.0-linux-x64/bin"
+          volumeMounts:
+            - name: jenkins-backend-src
+              mountPath: /backend
+            - name: jenkins-backend-test-src
+              mountPath: /backend-test
+            - name: jenkins-web-src
+              mountPath: /web
+            - name: jenkins-web-test-src
+              mountPath: /web-test
+            - name: jenkins-web-install
+              mountPath: /install
+            - name: jenkins-buildin-src
+              mountPath: /buildin
+            - name: jenkins-data
+              mountPath: /var/lib/jenkins
+      volumes:
+        - name: jenkins-backend-src
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-src
+        - name: jenkins-backend-test-src
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-test-src
+        - name: jenkins-web-src
+          persistentVolumeClaim:
+            claimName: deeptalk-web-src
+        - name: jenkins-web-test-src
+          persistentVolumeClaim:
+            claimName: deeptalk-web-test-src
+        - name: jenkins-web-install
+          persistentVolumeClaim:
+            claimName: deeptalk-web-install
+        - name: jenkins-buildin-src
+          persistentVolumeClaim:
+            claimName: deeptalk-buildin-src
+        - name: jenkins-data
+          persistentVolumeClaim:
+            claimName: deeptalk-jenkins-data

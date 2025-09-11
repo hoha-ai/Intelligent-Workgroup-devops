@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-ferretdb
+  namespace: deeptalk
+  labels:
+    app: deeptalk-ferretdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-ferretdb
+  template:
+    metadata:
+      labels:
+        app: deeptalk-ferretdb
+    spec:
+      containers:
+      - name: postgres
+        image: registry.jxit.net.cn:5000/ferretdb/postgres-documentdb:17-0.106.0-ferretdb-2.5.0
+        env:
+        - name: POSTGRES_USER
+          value: username
+        - name: POSTGRES_PASSWORD
+          value: password
+        - name: POSTGRES_DB
+          value: postgres
+        ports:
+        - containerPort: 5432
+          name: pg
+        volumeMounts:
+        - name: ferret-pgdata
+          mountPath: /var/lib/postgresql/data
+      - name: ferretdb
+        image: registry.jxit.net.cn:5000/ferretdb/ferretdb:2.5
+        env:
+        - name: FERRETDB_AUTH
+          value: "0"
+        - name: FERRETDB_POSTGRESQL_URL
+          value: postgres://username:password@127.0.0.1:5432/postgres
+        ports:
+        - containerPort: 27017
+          name: mongo
+      volumes:
+      - name: ferret-pgdata
+        persistentVolumeClaim:
+          claimName: deeptalk-mongo-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-mongo
+  namespace: deeptalk
+  labels:
+    app: deeptalk-ferretdb
+spec:
+  type: ClusterIP
+  selector:
+    app: deeptalk-ferretdb
+  ports:
+  - name: db
+    port: 27017
+    targetPort: mongo
+    protocol: TCP
+

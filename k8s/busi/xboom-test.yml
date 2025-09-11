@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-xboom-test
+  namespace: deeptalk
+spec:
+  ports:
+    - port: 18124
+      name: "xboom-test-port-18124"
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    app: deeptalk-xboom-test
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-xboom-test
+  namespace: deeptalk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-xboom-test
+  template:
+    metadata:
+      labels:
+        app: deeptalk-xboom-test
+    spec:
+      containers:
+        - name: deeptalk-xboom-test
+          image: registry.jxit.net.cn:5000/deeptalk/xboom:git-1642
+          command: ["sleep", "88888888888888"]
+          # command: ["python3", "run.py", "--host", "0.0.0.0", "--port", "8000", "--reload", "False", "--workers", "1"]
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: xboom-test-src
+              mountPath: /app
+            - name: xboom-data
+              mountPath: /data
+            - name: deeptalk-ssh-key
+              mountPath: /root/.ssh/id_rsa
+              subPath: id_rsa
+            - name: deeptalk-ssh-pub
+              mountPath: /root/.ssh/id_rsa.pub
+              subPath: id_rsa.pub
+      volumes:
+        - name: xboom-test-src
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-test-src
+        - name: xboom-data
+          persistentVolumeClaim:
+            claimName: deeptalk-xboom-data
+        - name: deeptalk-ssh-key
+          configMap:
+            name: deeptalk-ssh-key
+            items:
+              - key: id_rsa
+                path: id_rsa
+                mode: 0400
+        - name: deeptalk-ssh-pub
+          configMap:
+            name: deeptalk-ssh-pub
+            items:
+              - key: id_rsa.pub
+                path: id_rsa.pub

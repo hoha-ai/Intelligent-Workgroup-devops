@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deeptalk-windows
+  namespace: deeptalk
+  labels:
+    name: deeptalk-windows
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deeptalk-windows
+  template:
+    metadata:
+      labels:
+        app: deeptalk-windows
+    spec:
+      containers:
+      - name: deeptalk-windows
+        image: registry.jxit.net.cn:5000/dockurr/windows:latest
+        env:
+        - name: VERSION
+          value: "10"
+        - name: DISK_SIZE
+          value: "128G"
+        - name: RAM_SIZE
+          value: "16G"
+        - name: CPU_CORES
+          value: "8"
+        ports:
+          - containerPort: 8006
+            name: http
+            protocol: TCP
+          - containerPort: 3389
+            name: rdp
+            protocol: TCP
+          - containerPort: 3389
+            name: udp
+            protocol: UDP
+          - containerPort: 5900
+            name: vnc
+            protocol: TCP
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+          privileged: true
+        volumeMounts:
+        - mountPath: /storage
+          name: storage
+        - mountPath: /dev/kvm
+          name: dev-kvm
+        - mountPath: /dev/net/tun
+          name: dev-tun
+      terminationGracePeriodSeconds: 120
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: deeptalk-windows-pvc
+      - hostPath:
+          path: /dev/kvm
+        name: dev-kvm
+      - hostPath:
+          path: /dev/net/tun
+          type: CharDevice
+        name: dev-tun
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeptalk-windows
+  namespace: deeptalk
+spec:
+  ports:
+    - name: http
+      port: 8006
+      protocol: TCP
+      targetPort: 8006
+      nodePort: 8006
+  selector:
+    app: deeptalk-windows
+  type: NodePort

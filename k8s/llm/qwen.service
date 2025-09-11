@@ -1,0 +1,13 @@
+[Unit]
+Description=Qwen-2.5 Backend Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/home/root123/anaconda3/envs/qwen-2.5/bin/python /home/root123/anaconda3/envs/qwen-2.5/bin/vllm serve /home/root123/Qwen2.5-32B-Instruct-GPTQ-Int4/ --served-model-name qwen-2.5 --tensor-parallel-size 2 --max-model-len 8000 --enforce-eager --gpu_memory_utilization=0.75 --no-enable-chunked-prefill --host 0.0.0.0 --port 8088 --enable-auto-tool-choice --tool-call-parser hermes --quantization=gptq
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
