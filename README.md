@@ -54,8 +54,8 @@ Deploy and run the hoha.ai web platform locally in minutes.
 
 This repository focuses on the open-source web version. For an enhanced native experience and advanced features like **SiteMind™**, explore our commercial offerings on [hoha.ai](https://hoha.ai/).
 
-*   ✅ **Backend** (Open Source)  [Github](hhttps://github.com/hoha-ai/Intelligent-Workgroup-backend)
-*   ✅ **Frontend** (Open Source)  [Github](hhttps://github.com/hoha-ai/Intelligent-Workgroup-frontend)
+*   ✅ **Backend** (Open Source)  [Github](https://github.com/hoha-ai/Intelligent-Workgroup-backend)
+*   ✅ **Frontend** (Open Source)  [Github](https://github.com/hoha-ai/Intelligent-Workgroup-frontend)
 *   🔒 **Windows App** (Commercial)
 *   🔒 **macOS App** (Commercial)
 *   🔒 **Android App** (Commercial)
@@ -67,7 +67,7 @@ We're building the future of AI-native collaboration, and we welcome you to join
 
 ## 📄 License
 
-Licensed under the **Apache License 2.0**. Full details in the https://github.com/hoha-ai/Intelligent-Workgroup-devops/blob/master/LICENSE file.
+Licensed under the **Apache License 2.0**. Full details in the [LICENSE](https://github.com/hoha-ai/Intelligent-Workgroup-devops/blob/master/LICENSE) file.
 
 For inquiries about commercial licensing, please contact us at `hoha@leoyoung.tech`.
 
@@ -75,7 +75,7 @@ For inquiries about commercial licensing, please contact us at `hoha@leoyoung.t
 
 *   **Website**: [hoha.ai](https://hoha.ai/)
 *   **Business Inquiries**: `hoha@leoyoung.tech`
-*   **Community & Support**: Join our [Discord Server](https://discord.gg/your-invite-link) or open a [GitHub Issue](https://github.com/your-username/hoha.ai/issues).
+*   **Community & Support**: open [GitHub Issue](https://github.com/hoha-ai/Intelligent-Workgroup-devops/issues).
 
 ***
 
