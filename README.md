@@ -1,8 +1,7 @@
 # 🤖 hoha.ai
 
 <p align="center"> <strong>From Solo AI to Team Genius — Together.
-</strong><br /> Pioneering the AI-native workgroup: A revolutionary platform where teams and AI collaborate as a unified intelligence. </p> <p align="center"> <a href="https://github.com/hoha-ai/Intelligent-Workgroup-devops/stargazers"><img src="https://img.shields.io/github/stars/hoha-ai/Intelligent-Workgroup-devops?style=social" alt="GitHub Stars"></a> <a href="https://hoha.ai"><img src="https://img.shields.io/badge/Website-hoha.ai-green?style=flat-square" alt="Website"></a> </p>
-
+</strong><br /> Pioneering the AI-native workgroup: A revolutionary platform where teams and AI collaborate as a unified intelligence. </p> <p align="center"> <a href="https://github.com/hoha-ai/Intelligent-Workgroup-devops/stargazers"><img src="https://img.shields.io/github/stars/hoha-ai/Intelligent-Workgroup-devops?style=social" alt="GitHub Stars"></a> <a href="https://github.com/hoha-ai/Intelligent-Workgroup-devops/blob/master/LICENSE"><img src="https://img.shields.io/github/license/hoha-ai/Intelligent-Workgroup-devops?style=flat-square&color=blue" alt="License"></a> <a href="https://hoha.ai"><img src="https://img.shields.io/badge/Website-hoha.ai-green?style=flat-square" alt="Website"></a> </p>
 ***
 
 Tired of fragmented tools and siloed knowledge? hoha.ai moves beyond simple AI chatbots by creating a collaborative space where your team and multiple AIs work as a single, intelligent unit. This repository contains the open-source web platform, built from the ground up for the new era of AI-native teamwork.
@@ -68,7 +67,7 @@ We're building the future of AI-native collaboration, and we welcome you to join
 
 ## 📄 License
 
-Licensed under the **Apache License 2.0**. Full details in the [LICENSE](https://sider.ai/zh-CN/LICENSE) file.
+Licensed under the **Apache License 2.0**. Full details in the https://github.com/hoha-ai/Intelligent-Workgroup-devops/blob/master/LICENSE file.
 
 For inquiries about commercial licensing, please contact us at `hoha@leoyoung.tech`.
 
