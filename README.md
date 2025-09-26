@@ -56,13 +56,47 @@ Deploy and run the hoha.ai web platform locally in minutes.
     kubectl apply -f k8s/pvc
     kubectl apply -f k8s/busi
     ```
-5.  **Enter backend pod edit env file**
+5.  **Enter backend pod edit .env file**
     ```shell
-    kubectl create ns deeptalk
-    kubectl apply -f k8s/pvc
-    kubectl apply -f k8s/busi
+    kubectl -n deeptalk get pod | grep xboom
+    deeptalk-xboom-549ccbc49c-8zn78            1/1     Running     4              126d
+    kubectl -n deeptalk exec -it pod/deeptalk-xboom-549ccbc49c-8zn78 -- bash
+    ls -al .env
+    -rw-r--r-- 1 root root 3779 Sep 18 11:06 .env
     ```
+    change mail server to send register code
+    ```shell
+    MAIL_USERNAME=aiservice@aidynamic.com
+    MAIL_PASSWORD=xxxxxx
+    MAIL_FROM=aiservice@aidynamic.com
+    MAIL_PORT=465
+    MAIL_SERVER=smtp.qiye.aliyun.com
+    ```
+    change web search api address and token
+    ```shell
+    WEB_API_URL=https://api.xxx.com/v1/web-search
+    WEB_API_KEY=sk-xxxxx
+    ```
+    change embedding/reranking/chat model address and token
+    ```shell
+    EMBEDDING_MODEL_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+    EMBEDDING_MODEL_NAME=text-embedding-v4
+    EMBEDDING_MODEL_KEY=sk-xxx
 
+    RERANKER_MODEL_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+    RERANKER_MODEL_NAME=gte-rerank
+    RERANKER_MODEL_KEY=sk-xxx
+
+    LOCAL_MODEL_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+    LOCAL_MODEL_NAME=qwen-plus
+    LOCAL_MODEL_KEY=sk-xxx
+    ```
+7.  **Start backend server**
+    start server and access http://youip:18123
+    ```shell
+    bash restart.sh
+    tail -f nohup.out
+    ```
 ## 📱 Platforms
 
 This repository focuses on the open-source web version. For an enhanced native experience and advanced features like **SiteMind™**, explore our commercial offerings on [hoha.ai](https://hoha.ai/).
