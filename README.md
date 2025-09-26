@@ -42,30 +42,30 @@ Powered by a modern, scalable stack designed for real-time, AI-driven applicatio
 
 Deploy and run the hoha.ai web platform locally in minutes.
 1.  **Install k3s**
-    ```shell
+    ```ruby
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.28.8+k3s1 INSTALL_K3S_EXEC="--disable traefik --kube-apiserver-arg service-node-port-range=20-65535" sh -
     ```
 2.  **Clone the repository:**
-    ```shell
+    ```ruby
     https://github.com/hoha-ai/Intelligent-Workgroup-devops/
     cd Intelligent-Workgroup-devops/
     ```
 3.  **Create k8s resource**
-    ```shell
+    ```ruby
     kubectl create ns deeptalk
     kubectl apply -f k8s/pvc
     kubectl apply -f k8s/busi
     ```
 5.  **Enter backend pod edit .env file**
-    ```shell
-    kubectl -n deeptalk get pod | grep xboom
+    ```ruby
+    root@root123-NF5568M4:~# kubectl -n deeptalk get pod | grep xboom
     deeptalk-xboom-549ccbc49c-8zn78            1/1     Running     4              126d
-    kubectl -n deeptalk exec -it pod/deeptalk-xboom-549ccbc49c-8zn78 -- bash
+    root@root123-NF5568M4:~# kubectl -n deeptalk exec -it pod/deeptalk-xboom-549ccbc49c-8zn78 -- bash
     ls -al .env
     -rw-r--r-- 1 root root 3779 Sep 18 11:06 .env
     ```
     change mail server to send register code
-    ```shell
+    ```ruby
     MAIL_USERNAME=aiservice@aidynamic.com
     MAIL_PASSWORD=xxxxxx
     MAIL_FROM=aiservice@aidynamic.com
@@ -73,12 +73,12 @@ Deploy and run the hoha.ai web platform locally in minutes.
     MAIL_SERVER=smtp.qiye.aliyun.com
     ```
     change web search api address and token
-    ```shell
+    ```ruby
     WEB_API_URL=https://api.xxx.com/v1/web-search
     WEB_API_KEY=sk-xxxxx
     ```
     change embedding/reranking/chat model address and token
-    ```shell
+    ```ruby
     EMBEDDING_MODEL_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
     EMBEDDING_MODEL_NAME=text-embedding-v4
     EMBEDDING_MODEL_KEY=sk-xxx
@@ -93,9 +93,9 @@ Deploy and run the hoha.ai web platform locally in minutes.
     ```
 7.  **Start backend server**
     start server and access http://youip:18123
-    ```shell
-    bash restart.sh
-    tail -f nohup.out
+    ```ruby
+    root@root123-NF5568M4:~# bash restart.sh
+    root@root123-NF5568M4:~# tail -f nohup.out
     ```
 ## 📱 Platforms
 
