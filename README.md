@@ -50,7 +50,7 @@ Deploy and run the hoha.ai web platform locally in minutes.
     https://github.com/hoha-ai/Intelligent-Workgroup-devops/
     cd Intelligent-Workgroup-devops/
     ```
-3.  **Create k8s resource**
+3.  **Create k8s resource and wait all Running**
     ```ruby
     kubectl create ns deeptalk
     kubectl apply -f k8s/pvc
