@@ -54,7 +54,13 @@ Deploy and run the hoha.ai web platform locally in minutes.
     ```ruby
     kubectl create ns deeptalk
     kubectl apply -f k8s/pvc
-    kubectl apply -f k8s/busi
+    kubectl apply -f k8s/busi/postgres.yml
+    kubectl apply -f k8s/busi/seaweed.yml
+    kubectl apply -f k8s/busi/etcd.yml
+    kubectl apply -f k8s/busi/milvus.yml
+    kubectl apply -f k8s/busi/neo4j.yml
+    kubectl apply -f k8s/busi/tika.yml
+    kubectl apply -f k8s/busi/xboom.yml
     ```
 5.  **Enter backend pod edit .env file**
     ```ruby
