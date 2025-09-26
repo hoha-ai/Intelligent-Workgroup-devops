@@ -50,8 +50,18 @@ Deploy and run the hoha.ai web platform locally in minutes.
     https://github.com/hoha-ai/Intelligent-Workgroup-devops/
     cd Intelligent-Workgroup-devops/
     ```
-3.  **Follow this doc**
-    <https://docs.qq.com/doc/DU3RxT052cEJVT2ht>
+3.  **Create k8s resource**
+    ```shell
+    kubectl create ns deeptalk
+    kubectl apply -f k8s/pvc
+    kubectl apply -f k8s/busi
+    ```
+5.  **Enter backend pod edit env file**
+    ```shell
+    kubectl create ns deeptalk
+    kubectl apply -f k8s/pvc
+    kubectl apply -f k8s/busi
+    ```
 
 ## 📱 Platforms
 
