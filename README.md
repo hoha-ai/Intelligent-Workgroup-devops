@@ -41,13 +41,16 @@ Powered by a modern, scalable stack designed for real-time, AI-driven applicatio
 ## 🚀 Quick Start
 
 Deploy and run the hoha.ai web platform locally in minutes.
-
-1.  **Clone the repository:**
+1.  **Install k3s**
+    ```shell
+    curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.28.8+k3s1 INSTALL_K3S_EXEC="--disable traefik --kube-apiserver-arg service-node-port-range=20-65535" sh -
+    ```
+2.  **Clone the repository:**
     ```shell
     https://github.com/hoha-ai/Intelligent-Workgroup-devops/
     cd Intelligent-Workgroup-devops/
     ```
-2.  **Follow this doc**
+3.  **Follow this doc**
     <https://docs.qq.com/doc/DU3RxT052cEJVT2ht>
 
 ## 📱 Platforms
