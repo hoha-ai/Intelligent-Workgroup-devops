@@ -62,11 +62,17 @@ Deploy and run the hoha.ai web platform locally in minutes.
     kubectl apply -f k8s/busi/tika.yml
     kubectl apply -f k8s/busi/xboom.yml
     ```
-5.  **Enter backend pod edit .env file**
+4.  **Enter backend pod clone backend code**
     ```ruby
     root@root123-NF5568M4:~# kubectl -n deeptalk get pod | grep xboom
     deeptalk-xboom-549ccbc49c-8zn78            1/1     Running     4              126d
     root@root123-NF5568M4:~# kubectl -n deeptalk exec -it pod/deeptalk-xboom-549ccbc49c-8zn78 -- bash
+    cd /opt
+    git clone https://github.com/hoha-ai/Intelligent-Workgroup-backend
+    cd Intelligent-Workgroup-backend
+    ```
+5.  **Enter backend pod edit .env file**
+    ```ruby
     ls -al .env
     -rw-r--r-- 1 root root 3779 Sep 18 11:06 .env
     ```
@@ -97,7 +103,7 @@ Deploy and run the hoha.ai web platform locally in minutes.
     LOCAL_MODEL_NAME=qwen-plus
     LOCAL_MODEL_KEY=sk-xxx
     ```
-7.  **Start backend server**
+6.  **Start backend server**
     start server and access http://youip:18123
     ```ruby
     root@root123-NF5568M4:~# bash restart.sh
