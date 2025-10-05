@@ -42,7 +42,7 @@ spec:
             - name: ETCD_ENDPOINTS
               value: "deeptalk-etcd:2379"
             - name: MINIO_ADDRESS
-              value: "deeptalk-minio:9000"
+              value: "deeptalk-seaweed:8333"
           volumeMounts:
             - name: milvus-storage
               mountPath: /var/lib/milvus
