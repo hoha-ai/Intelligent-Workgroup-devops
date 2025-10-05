@@ -61,6 +61,7 @@ Deploy and run the hoha.ai web platform locally in minutes.
     kubectl apply -f k8s/busi/neo4j.yml
     kubectl apply -f k8s/busi/tika.yml
     kubectl apply -f k8s/busi/xboom.yml
+    kubectl apply -f k8s/busi/web.yml
     ```
 4.  **Enter backend pod clone backend code**
     ```ruby
@@ -104,11 +105,21 @@ Deploy and run the hoha.ai web platform locally in minutes.
     LOCAL_MODEL_KEY=sk-xxx
     ```
 6.  **Start backend server**
-    start server and access http://youip:18123
+    start backend server
     ```ruby
     root@root123-NF5568M4:~# bash restart.sh
     root@root123-NF5568M4:~# tail -f nohup.out
     ```
+7.  **entry frontend pod and deploy**
+    access http://120.196.67.248:18123/install/web/ get latest fronend package
+    ```ruby
+    kubectl -n deeptalk exec -it pod/deeptalk-web-68b95dc496-5gcm4 -- sh
+    cd /usr/local/nginx/html/
+    wget http://120.196.67.248:18123/install/web/Deeptalk-web-2.2.0-release-master-20250923.tar.gz
+    tar -zxf Deeptalk-web-2.2.0-release-master-20250923.tar.gz 
+    mv Deeptalk-web-2.2.0-release-master-20250923/* .
+    ```
+8.  **access http://youip:18123**
 ## 📱 Platforms
 
 This repository focuses on the open-source web version. For an enhanced native experience and advanced features like **SiteMind™**, explore our commercial offerings on [hoha.ai](https://hoha.ai/).
