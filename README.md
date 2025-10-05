@@ -47,7 +47,7 @@ Deploy and run the hoha.ai web platform locally in minutes.
     ```
 2.  **Clone the repository:**
     ```ruby
-    https://github.com/hoha-ai/Intelligent-Workgroup-devops/
+    git clone https://github.com/hoha-ai/Intelligent-Workgroup-devops/
     cd Intelligent-Workgroup-devops/
     ```
 3.  **Create k8s resource and wait all Running**
