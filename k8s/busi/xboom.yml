@@ -96,12 +96,6 @@ spec:
               mountPath: /etc/xboom
             - name: xboom-data
               mountPath: /data
-            - name: deeptalk-ssh-key
-              mountPath: /root/.ssh/id_rsa
-              subPath: id_rsa
-            - name: deeptalk-ssh-pub
-              mountPath: /root/.ssh/id_rsa.pub
-              subPath: id_rsa.pub
       volumes:
         - name: xboom-src
           persistentVolumeClaim:
@@ -112,16 +106,3 @@ spec:
         - name: xboom-conf
           configMap:
             name: deeptalk-xboom-conf
-        - name: deeptalk-ssh-key
-          configMap:
-            name: deeptalk-ssh-key
-            items:
-              - key: id_rsa
-                path: id_rsa
-                mode: 0400
-        - name: deeptalk-ssh-pub
-          configMap:
-            name: deeptalk-ssh-pub
-            items:
-              - key: id_rsa.pub
-                path: id_rsa.pub
